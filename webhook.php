@@ -13,6 +13,10 @@ if(!isset($_POST['stripped-text'])) {
 }
 preg_match('/Olá (?<nome>.*)\r\n/', $_POST['stripped-text'], $matches);
 
+if(!isset($_POST['nome'])) {
+    return;
+}
+
 $redis   = new Predis\Client([
     'host' => getenv('REDIS_HOST'),
     'port' => getenv('REDIS_PORT')
