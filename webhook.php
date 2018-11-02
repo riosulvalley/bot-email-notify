@@ -1,6 +1,4 @@
 <?php
-use Telegram\Bot\Api;
-
 require 'vendor/autoload.php';
 
 if(file_exists('.env')) {
@@ -9,11 +7,13 @@ if(file_exists('.env')) {
 }
 
 if(!isset($_POST['stripped-text'])) {
+    error_log('Sem stripped-text');
     return;
 }
 preg_match('/Olá (?<nome>.*)\r\n/', $_POST['stripped-text'], $matches);
 
-if(!isset($_POST['nome'])) {
+if(!isset($matches['nome'])) {
+    error_log('Nome não encontrado: '.$_POST['stripped-text']);
     return;
 }
 
@@ -23,9 +23,11 @@ $redis   = new Predis\Client([
 ]);
 $redis->auth(getenv('REDIS_AUTH'));
 $redis->incr('counter');
+error_log('Contador incrementado');
 
-$telegram = new Api();
+$telegram = new Telegram\Bot\Api();
 $telegram->sendMessage([
     'chat_id' => getenv('CHAT_ID'),
     'text' => "Mais um: ".$matches['nome']."\nTotal: ".$redis->get('counter')
 ]);
+error_log('Enviado!');
