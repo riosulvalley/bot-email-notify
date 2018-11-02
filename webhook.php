@@ -8,6 +8,9 @@ if(file_exists('.env')) {
     $dotenv->load();
 }
 
+if(!isset($_POST['stripped-text'])) {
+    return;
+}
 preg_match('/Olá (?<nome>.*)\r\n/', $_POST['stripped-text'], $matches);
 
 $redis   = new Predis\Client([
