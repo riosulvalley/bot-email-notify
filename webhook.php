@@ -10,7 +10,7 @@ if(!isset($_POST['stripped-text'])) {
     error_log('Sem stripped-text');
     return;
 }
-preg_match('/Olá (?<nome>.*)\r\n/', $_POST['stripped-text'], $matches);
+preg_match('/Olá (?<nome>.*)/', $_POST['stripped-text'], $matches);
 
 if(!isset($matches['nome'])) {
     error_log('Nome não encontrado: '.$_POST['stripped-text']);
